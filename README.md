@@ -1,182 +1,36 @@
-# Proyecto: BDD con Cucumber y Node.js
+<h4 align="center">Proyecto base de <a href="https://github.com/karatelabs/karate" target="_blank">Pragma</a></h4>
 
-Este proyecto tiene como objetivo implementar pruebas de comportamiento (BDD - Behavior Driven Development) usando **Cucumber.js** junto con **TypeScript** y **Chai** como herramienta de aserción.
-
-## 🎯 Objetivo del Proyecto
-
-El propósito es probar funcionalidades de login y un CRUD de usuarios utilizando un enfoque de desarrollo guiado por comportamiento, lo cual permite:
-
-- Validar el comportamiento esperado de la aplicación de forma legible.
-- Generar documentación ejecutable.
-- Facilitar la colaboración entre equipos técnicos y no técnicos.
-
----
-
-## 📁 Estructura de Carpetas
+Este repositorio cuenta con la siguiente estructura base para su documentación:
 
 ```
-bdd-cucumber-node/
-│
-├── package.json             # Configuración de dependencias y scripts
-├── tsconfig.json            # Configuración de TypeScript
-├── .gitignore
-├── README.md
-│
-├── src/                     # Código fuente de la aplicación
-│   └── app/
-│         └── models/
-│             └── user.model.ts #Modelo de un usuario
-│         └── services/
-│              └── login.service.ts  # Servicio de login simulado
-│              └── login.service.ts  # Servicio de Usuarios simulado 
-│
-├── tests/                   # Pruebas
-│   └── features/
-│       ├── auth.feature     # Archivo con el escenario en lenguaje Gherkin
-│       ├── user.feature     # Archivo con el escenario en lenguaje Gherkin
-│       └── steps/
-│           └── auth.steps.ts # Definición de los pasos en TypeScript
-│           └── create-multiple-users.steps.ts # Definición de los pasos en TypeScript
-│           └── create-user.steps.ts # Definición de los pasos en TypeScript
-│           └── get-all-users.steps.ts # Definición de los pasos en TypeScript
+- catalog-info.yaml
+- docs
+  - General Information.md
+  - Requeriments.md
+  - Tech Stack & Dependencies.md
+  - Access to the project.md
+  - Project Structure.md
+  - Tests Structure.md
+  - Execute Tests.md
+  - Licencia.md
+  - Author.md
+- mkdocs.yaml
 ```
 
----
+## Estructura
 
-## 🧩 Librerías y Dependencias
+### catalog-info.yaml
 
-El proyecto usa las siguientes dependencias:
+Este archivo es necesario pensando en una plataforma de ingeniería [(Backstage)](https://backstage.io/docs/overview/what-is-backstage), con la intención de centralizar y visualizar todos los repositorios de una manera diferente a lo que puede proveer Github. Dentro del mismo documento se encontrarán enlaces a la documentación oficial que indicará el significado de cada uno de los parámetros solicitados (recuerda actualizar su contenido).
 
-| Paquete              | Uso |
-|----------------------|-----|
-| `@cucumber/cucumber` | Motor de pruebas BDD (Cucumber.js) |
-| `chai`               | Librería de aserciones |
-| `copyfiles`          | Copia archivos `.feature` a `dist` |
-| `rimraf`             | Limpia carpetas (`dist`) antes de cada build |
-| `typescript`         | Transpilador de TS a JS |
-| `@types/node`, `@types/chai` | Tipado para Node y Chai |
+### /docs
 
-Para instalarlas se usa el siguiente comando:
+Dentro de la carpeta docs se encontrarán las diferentes partes de un readme con un pequeño ejemplo dentro de cada una de ellas (recuerda actualizar su contenido).
 
-```bash
-npm install
-```
+### mkdocs.yaml
 
----
-
-## ▶️ Scripts Disponibles
-
-El archivo `package.json` contiene varios scripts útiles:
-
-```json
-"scripts": {
-  "clean-dist": "rimraf dist/tests/features",
-  "create-dist": "mkdir dist\\tests\\features",
-  "copy-features": "copyfiles tests/features/*.feature dist",
-  "test": "npm run clean-dist && npm run create-dist && npm run copy-features && tsc && cucumber-js dist/tests/features --publish-quiet"
-}
-```
-
-### Cómo ejecutar las pruebas
-
-1. Compila el proyecto y ejecuta las pruebas con:
-
-```bash
-npm test
-```
-
-Este comando realiza:
-
-- Limpieza de la carpeta `dist`
-- Creación de estructura para los archivos `.feature`
-- Copia de archivos `.feature` al `dist`
-- Transpilación de TypeScript
-- Ejecución de las pruebas con Cucumber.js
-
----
-
-## 🧪 Escenario de Prueba (`auth.feature`)
-
-```gherkin
-Feature: Autenticar usuarios
-
-    Scenario: Usuario ingresa credenciales válidas y la autenticación es exitosa
-        Given Un servicio de login
-        When Usuario ingresa "admin" y "admin"
-        Then El servicio debe responder con código 200
-
-    Scenario: Usuario ingresa credenciales inválidas y la autenticación no es exitosa
-        Given Un servicio de login
-        When Usuario ingresa "admin1" y "admin2"
-        Then El servicio debe responder con código 401
-```
-
-## 🧪 Escenario de Prueba (`user.feature`)
-
-```gherkin
-Feature: Crear Usuario
-    Como administrador del sistema
-    Quiero crear un nuevo usuario
-    Para que el usuario pueda acceder al sistema
-
-    Scenario: Creación exitosa de un nuevo usuario
-        Given Ingreso información válida de un usuario como nombre "Jhonata Valencia", email "jhonatan.valencia@pragma.com.co", edad 24
-        When Voy a crear un nuevo usuario
-        Then Debería recibir una respuesta exitosa con código 200 y el detalle del nuevo usuario
-
-    Scenario: Creación exitosa de múltiples usuarios
-        Given Ingreso la siguiente data de varios usuarios:
-            | name       | email            | age |
-            | John Doe   | john@example.com | 30  |
-            | Jane Smith | jane@example.com | 25  |
-        When Voy a crear varios usuarios
-        Then Debería recibir una respuesta exitosa con código 200 y el detalle de los nuevos usuarios
-
-    @emptyList
-    Scenario: Obtener lista de usuarios vacía
-        Given No hay usuarios registrados
-        When Quiero obtener el listado de usuarios
-        Then Deberia obtener una respuesta con código 404
-
-    Scenario: Obtener listado de usuarios
-        Given Estan registrados los siguientes usuarios:
-            | name       | email            | age |
-            | John Doe   | john@example.com | 30  |
-            | Jane Smith | jane@example.com | 25  |
-        When Quiero obtener el listado de usuarios
-        Then Deberia obtener una respuesta con código 200 y los siguientes usuarios:
-            | name       | email            | age |
-            | John Doe   | john@example.com | 30  |
-            | Jane Smith | jane@example.com | 25  |
-```
-
-Al ejecutar los tests debe salir en consola una respuesta como la siguiente en caso de que todos los tests hayan sigo exitosos:
-
-![alt text](image.png)
+Este documento contiene la ruta de navegación estructurada de los diferentes archivos que están dentro de la carpeta docs. Esto para una mejor categorización y vizualización de la documentación dentro de la plataforma de ingeniería.
 
 
-Si alguno o varios de los casos de prueba fallan, la respuesta sería como el siguiente ejemplo:
-
-![alt text](image-1.png)
-
----
-
-## 🧠 Buenas prácticas aplicadas
-
-- **Separación de responsabilidades**: lógica del servicio (`src`) y pruebas (`tests`).
-- **Transpilación segura**: uso de TypeScript y control de tipado.
-- **Independencia de pruebas**: pruebas corren desde `dist` para evitar dependencias del entorno fuente.
-- **Automatización del flujo de pruebas** con scripts de NPM.
-
----
-
-## 🧾 Requisitos
-
-- Node.js >= 18.x
-- npm >= 9.x
-
----
-
-## 🙋 Autor
-
-**Jhonatan Valencia Arango**
+### [Nota]
+Este README es utilizado para dar claridad sobre la documentación de este repositorio y la estructuración de la misma, toda la documentación del repositorio se encuentra en la carpeta /docs. 
