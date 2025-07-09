@@ -1,0 +1,22 @@
+{
+  "name": "bdd-cucumber-node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "clean-dist": "rimraf dist/tests/features",
+    "create-dist": "mkdir dist\\tests\\features",
+    "copy-features": "copyfiles tests/features/*.feature dist",
+    "test": "npm run clean-dist && npm run create-dist && npm run copy-features && tsc && cucumber-js dist/tests/features --publish-quiet"
+  },
+  "keywords": [],
+  "author": "Jhonatan Valencia Arango",
+  "license": "ISC",
+  "devDependencies": {
+    "@cucumber/cucumber": "^7.0.0",
+    "@types/chai": "^4.2.16",
+    "chai": "^4.3.4",
+    "copyfiles": "^2.4.1",
+    "rimraf": "^6.0.1"
+  }
+}
